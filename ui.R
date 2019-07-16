@@ -1,4 +1,5 @@
 library(shiny)
+library(DT)
 
 shinyUI(
   fluidPage(
@@ -98,7 +99,10 @@ shinyUI(
       ),
       
       mainPanel(
-        plotOutput("plot")
+        plotOutput("plot", width = 700, height = 600),
+        DT::dataTableOutput("table", width = 700),
+        fluidRow(column(12, align="center",
+                        uiOutput('ui.download')))
       )
     )
   )
