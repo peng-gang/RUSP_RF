@@ -169,6 +169,15 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  observeEvent(
+    eventExpr = input$table_rows_selected, handlerExpr = {
+      output$plot <- renderPlot({
+        s <- input$table_rows_selected
+        plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 0.5, cutoff, s)
+      })
+    }
+  )
+  
   output$downloadtable <- downloadHandler('rlt.csv', content = function(file) {
     write.csv(rlt, file, row.names = FALSE)
   })
