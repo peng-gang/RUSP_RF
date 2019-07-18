@@ -171,6 +171,7 @@ shinyServer(function(input, output, session) {
   
   observeEvent(
     eventExpr = input$table_rows_selected, handlerExpr = {
+      idx.disorder <- as.integer(input$disorder)
       output$plot <- renderPlot({
         s <- input$table_rows_selected
         plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 0.5, cutoff, s)
