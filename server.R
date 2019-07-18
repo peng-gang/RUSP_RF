@@ -128,7 +128,7 @@ shinyServer(function(input, output, session) {
   
   observeEvent(
     eventExpr = input$disorder, handlerExpr = {
-      if(input$disorder != disorder.sel){
+      if(!is.null(input$action) && input$disorder != disorder.sel){
         showModal(
           modalDialog(
             p("Are you sure to change the disorder type? \n You will lose the current results if you change the selection."),
