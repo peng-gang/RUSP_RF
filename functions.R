@@ -2,10 +2,13 @@
 library(randomForest)
 library(ggplot2)
 
-plotBox <- function(prob, prob.train, y.train, cutoff){
-  dplot <- data.frame(group = y.train, p = prob.train)
+source("parameter.R")
+
+plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel){
+  dplot <- data.frame(group = y.train, p = prob.train, stringsAsFactors = FALSE)
+  dplot$group <- factor(dplot$group, levels = c("FP", "NewData", "TP"))
   dplot.point <- data.frame(
-    group = ifelse(prob>cutoff, "MMA.TP", "MMA.FP"),
+    group = factor(rep("NewData", length(prob)), levels = c("FP", "NewData", "TP")),
     p = prob
   )
   gp <- ggplot(dplot, aes(x=group, y=p)) + 
@@ -16,12 +19,13 @@ plotBox <- function(prob, prob.train, y.train, cutoff){
     scale_color_manual(values = c("#00A1D599", "#B2474599")) +
     theme_bw() +
     theme(legend.title=element_blank())
-  gp <- gp + geom_point(data = dplot.point[dplot.point$group=="MMA.TP",], 
+  gp <- gp + geom_point(data = dplot.point[dplot.point$p>=cutoff.sel,], 
                         aes(x=group, y=p), color = "#B24745FF", size = 3) +
-    geom_point(data = dplot.point[dplot.point$group=="MMA.FP",], 
-               aes(x=group, y=p), color = "#6A6599FF", size = 3) +
+    geom_point(data = dplot.point[dplot.point$p<cutoff.sel,], 
+               aes(x=group, y=p), color = "#00A1D5FF", size = 3) +
     theme(axis.text = element_text(size = 15), axis.title = element_text(size=18),
-          legend.text = element_text(size=18))
-  gp <- gp + geom_hline(yintercept = cutoff, color = "brown", size = 2)
+          legend.position = "none")
+  gp <- gp + geom_hline(yintercept = cutoff.sel, color = "#DF8F44FF", size = 2, linetype = 2) +
+    geom_hline(yintercept = cutoff.suggest, color = "#DF8F44FF", size = 2)
   gp
 }

@@ -1,6 +1,8 @@
 library(shiny)
 library(DT)
 
+source("parameter.R")
+
 shinyUI(
   fluidPage(
     titlePanel("NBSRF",
@@ -15,14 +17,10 @@ shinyUI(
             value = "data",
             
             tags$div(
-              title = "What kind of disease do you want to check?",
-              selectInput("disease", label = h3("Disease"), 
-                          choices = list(
-                            "MMA" = "mma", 
-                            "GA-1" = "ga1", 
-                            "OTC" = "otc",
-                            "VLCADD" = "vlcadd"), 
-                          selected = "mma")
+              title = "What kind of disorder do you want to check?",
+              selectInput("disorder", label = h3("Disorder"), 
+                          choices = disorder.all, 
+                          selected = 1)
             ),
             
             tags$div(
@@ -99,10 +97,12 @@ shinyUI(
       ),
       
       mainPanel(
-        plotOutput("plot", width = 700, height = 600),
-        DT::dataTableOutput("table", width = 700),
-        fluidRow(column(12, align="center",
-                        uiOutput('ui.download')))
+        plotOutput("plot", width = 600, height = 600),
+        fluidRow(column(8, align="center",
+                        uiOutput('ui.download.figure'))),
+        DT::dataTableOutput("table", width = 600),
+        fluidRow(column(8, align="center",
+                        uiOutput('ui.download.table')))
       )
     )
   )
