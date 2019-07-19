@@ -18,14 +18,14 @@ shinyUI(
             
             tags$div(
               title = "What kind of disorder do you want to check?",
-              selectInput("disorder", label = h3("Disorder"), 
+              selectInput("disorder", label = h4("Disorder"), 
                           choices = disorder.all, 
                           selected = 1)
             ),
             
             tags$div(
               title = "Which state does the data come from",
-              selectInput("state", label = h3("State"),
+              selectInput("state", label = h4("State"),
                           choices = list(
                             "California" = "california"
                           ),
@@ -43,6 +43,8 @@ shinyUI(
               )
             ),
             
+            p(a("Example of input File", href="mma.csv", download="mma.csv")),
+            actionLink("link_to_tabpanel_about", "Details about input file format"),
             
             tags$div(
               title = "What kind of delimiter is used in input file",
@@ -59,39 +61,50 @@ shinyUI(
               )
             ),
             
-            p(a("Example of input File", href="mma.csv", download="mma.csv")),
-            actionLink("link_to_tabpanel_about", "Details about input file format"),
             
             uiOutput('ui.action'),
             hr(),
-            uiOutput("ui.cutoff")
+            
+            uiOutput("ui.cutoff"),
+            
+            p(
+              "Copyright 2019 by ",
+              a("Gang Peng ",
+                href = "https://publichealth.yale.edu/people/gang_peng-1.profile",
+                target = "_blank"),
+              "and ",
+              a("Curt Scharfe.",
+                href = "https://medicine.yale.edu/genetics/people/curt_scharfe-2.profile",
+                target = "_blank")
+            ),
+            p(
+              "Report issues to the",
+              a("developers.",
+                href = "mailto:gang.peng@yale.edu")
+            )
           ),
           
           tabPanel(
             "About",
             value = "about",
-            h4(tags$strong("About NBSRF")),
+            includeMarkdown("content/About.md"),
             p(
-              "This web application shows the dynamic changes in newborn metabolism in relation to birth weight,
-            gestational age, sex, and race/ethnicity and to assess variable levels of specific screening markers for
-            inborn metabolic disorders."
-            ),
-            h4(tags$strong("Instructions")),
-            h4(tags$strong("Data")),
-            p("Input data format"),
-            h4(tags$strong("Code")),
-            p(
-              a("Source Code",
-                href = "https://github.com/peng-gang/RUSP_RF", target = "_blank")
+              "Copyright 2019 by ",
+              a("Gang Peng ",
+                href = "https://publichealth.yale.edu/people/gang_peng-1.profile",
+                target = "_blank"),
+              "and ",
+              a("Curt Scharfe.",
+                href = "https://medicine.yale.edu/genetics/people/curt_scharfe-2.profile",
+                target = "_blank")
             ),
             p(
-              "Built with ",
-              a("R",
-                href = "https://www.r-project.org", target = "_blank"),
-              "and the ",
-              a("Shiny framework.",
-                href = "http://shiny.rstudio.com", target = "_blank")
+              "Report issues to the",
+              a("developers.",
+                href = "mailto:gang.peng@yale.edu")
             )
+            
+            
           )
         )
       ),
