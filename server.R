@@ -131,11 +131,11 @@ shinyServer(function(input, output, session) {
       if(input$disorder != disorder.sel){
         showModal(
           modalDialog(
-            p("If you choose to continue, the current input file and the results will be cleared. Please download the results beforehand if you prefer to keep a record."),
-            title = "You are navigating to a different disease type",
+            p("Are you sure to change the disorder type? \n You will lose the current results if you change the selection."),
+            title = "Warning!",
             footer = tagList(
-              actionButton("no", "Cancel"),
-              actionButton("yes", "Continue")
+              actionButton("no", "No"),
+              actionButton("yes", "Yes")
             )
           )
         )
