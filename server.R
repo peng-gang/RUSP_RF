@@ -78,6 +78,13 @@ shinyServer(function(input, output, session) {
       output$plot <- renderPlot({
         isolate({
           input.data <- inputdata()
+          cname <- colnames(input.data)
+          tmp <- colname.format(cname)
+          if(!is.null(tmp$cname.notfount)){
+            
+          }
+          colnames(input.data) <- tmp$cname.new
+          
           prob <<- predict(models[[idx.disorder]], input.data, type = "prob")[,2]
           plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 0.5, cutoff)
         })
@@ -87,6 +94,9 @@ shinyServer(function(input, output, session) {
         DT::datatable({
           isolate({
             input.data <- inputdata()
+            cname <- colnames(input.data)
+            tmp <- colname.format(cname)
+            colnames(input.data) <- tmp$cname.new
             rlt <<- data.frame(
               ID = input.data$id,
               Probability = prob,
@@ -113,6 +123,9 @@ shinyServer(function(input, output, session) {
         DT::datatable({
           isolate({
             input.data <- inputdata()
+            cname <- colnames(input.data)
+            tmp <- colname.format(cname)
+            colnames(input.data) <- tmp$cname.new
             rlt <<- data.frame(
               ID = input.data$id,
               Probability = prob,
@@ -128,7 +141,7 @@ shinyServer(function(input, output, session) {
   
   observeEvent(
     eventExpr = input$disorder, handlerExpr = {
-      if(input$disorder != disorder.sel){
+      if(!is.null(input$action) && input$disorder != disorder.sel){
         showModal(
           modalDialog(
             p("If you choose to continue, the current input file and the results will be cleared. Please download the results beforehand if you prefer to keep a record."),

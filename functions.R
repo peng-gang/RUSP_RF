@@ -4,6 +4,33 @@ library(ggplot2)
 
 source("parameter.R")
 
+colname.format <- function(colnames.old){
+  cname.new <- NULL
+  cname.code <- names(colname.list)
+  cname.notfount <- NULL
+  for(cname in colnames.old){
+    found <- FALSE
+    for(i in 1:length(colname.list)){
+      if(toupper(cname) %in% colname.list[[i]]){
+        cname.new <- c(cname.new, cname.code[i])
+        found <- TRUE
+        next
+      }
+    }
+    if(!found){
+      cname.new <- c(cname.new, cname)
+      cname.notfount <- c(cname.notfount, cname)
+    }
+  }
+  rlt <- list(
+    cname.new = cname.new,
+    cname.notfount = cname.notfount
+  )
+  rlt
+}
+
+
+
 plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point.sel=NULL){
   dplot <- data.frame(group = y.train, p = prob.train, stringsAsFactors = FALSE)
   dplot$group <- factor(dplot$group, levels = c("FP", "NewData", "TP"))
