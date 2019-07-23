@@ -4,6 +4,11 @@ library(ggplot2)
 
 source("parameter.R")
 
+percent.format <- function(pc, ns = 2){
+  paste0(format(round(pc*100, ns), nsmall = ns), "%")
+}
+
+
 colname.format <- function(colnames.old){
   cname.new <- NULL
   cname.code <- names(colname.list)
@@ -57,9 +62,11 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
                aes(x=group, y=p), color = "#00A1D5FF", size = 3) +
     theme(axis.text = element_text(size = 15), axis.title = element_text(size=18),
           legend.position = "none")
-  gp <- gp + scale_x_discrete(labels=c("FP" = paste0("FP(",num.FP.RF, "/", num.FP, ")"), 
+  gp <- gp + scale_x_discrete(labels=c("FP" = paste0("FP(",num.FP.RF, "/", num.FP, "=", 
+                                                     percent.format(num.FP.RF/num.FP, 1), ")"), 
                                        "NewData" = "NewData",
-                                       "TP" = paste0("TP(", num.FN, "/", num.TP, ")")))
+                                       "TP" = paste0("TP(", num.FN, "/", num.TP, "=",
+                                                     percent.format(num.FN/num.TP, 1), ")")))
   
   
   if(!is.null(point.sel)){
