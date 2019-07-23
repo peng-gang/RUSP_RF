@@ -19,9 +19,12 @@ The description and format of each column is described below:
 | Column         | 1    | 2-40   |
 |:-------------------|:-------------------------|:------------------------------------|
 | Headers | id | Original marker name or its abbreviation |
-| Example Headers | id | Citrulline, CIT |
+| Example Headers | id | Citrulline, CIT, C18:1, c181 |
 | Values | Unique sample id (string) | Individual marker concentration levels (numeric) |
 | Example Values | S01, sample_001 | 0.2, 0.11421383 |
+
+<br>
+As long as all the 39 marker levels are included in the file, the metabolic markers can be in any order based on your preference.
 
 #### Code
 
