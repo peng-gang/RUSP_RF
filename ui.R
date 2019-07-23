@@ -111,10 +111,11 @@ shinyUI(
       
       mainPanel(
         plotOutput("plot", width = 600, height = 600),
-        fluidRow(column(8, align="center",
+        fluidRow(column(8, align="right",
                         uiOutput('ui.download.figure'))),
+        hr(),
         DT::dataTableOutput("table", width = 600),
-        fluidRow(column(8, align="center",
+        fluidRow(column(8, align="right",
                         uiOutput('ui.download.table')))
       )
     )
