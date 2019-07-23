@@ -81,7 +81,11 @@ shinyServer(function(input, output, session) {
           cname <- colnames(input.data)
           tmp <- colname.format(cname)
           if(!is.null(tmp$cname.notfount)){
-            
+            showModal(modalDialog(
+              title = "Column Name",
+              paste0("The following column(s) in the input file cannot be matched to the model:\n",
+                     paste(tmp$cname.notfount, collapse = "\n"))
+            ))
           }
           colnames(input.data) <- tmp$cname.new
           

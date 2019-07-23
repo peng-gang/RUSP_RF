@@ -38,6 +38,10 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
     group = factor(rep("NewData", length(prob)), levels = c("FP", "NewData", "TP")),
     p = prob
   )
+  num.TP <- sum(dplot$group=="TP")
+  num.FP <- sum(dplot$group=="FP")
+  num.FN <- sum(dplot$p[dplot$group=="TP"]<cutoff.sel)
+  num.FP.RF <- sum(dplot$p[dplot$group=="FP"]>=cutoff.sel)
   
   gp <- ggplot(dplot, aes(x=group, y=p)) + 
     geom_boxplot(aes(color = group, fill = group), outlier.colour = NULL, outlier.fill = NULL) + 
@@ -53,6 +57,9 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
                aes(x=group, y=p), color = "#00A1D5FF", size = 3) +
     theme(axis.text = element_text(size = 15), axis.title = element_text(size=18),
           legend.position = "none")
+  gp <- gp + scale_x_discrete(labels=c("FP" = paste0("FP(",num.FP.RF, "/", num.FP, ")"), 
+                                       "NewData" = "NewData",
+                                       "TP" = paste0("TP(", num.FN, "/", num.TP, ")")))
   
   
   if(!is.null(point.sel)){
