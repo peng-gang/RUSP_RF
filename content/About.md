@@ -8,13 +8,20 @@ Random Forest was proved promising in other multivrariate analysis settings and 
 TBA
 
 #### Instructions
+1. Click an item from "Disorder" drop-down menu to navigate to the disease type of your interest
+2. Click an item from "State" drop-down menu to switch between database of each state
+3. Click on the "Browse..." button to choose a input file from local (The application won't keep record of any of your data or the results. Your information won't be tracked when you visit this website.)
+4. Choose the demilimter of your input file and click "RUSP_RF"
+5. Once the calculation is done, the result figure and table will show on the right panel. You could specify a sample on the figure by clicking the corresponding row on the table. Click the row once again to cancel.   
+6. Click on the "Download figure/table" button to download the results to your local devices.     
 
-TBA
+#### Result Boxplot Explanation
+The left side and the right side of the boxplot represent the FP cases and TP cases in our model, respectively. The center column represents the samples from input file. The solid orange line is the optimal cutoff suggested by the RF cross validation for each disease. The user selected cutoff (represented by dotted organe line) can be changed by using the sliderbar on the left panel. The numbers under the x-axis represent the change of error rate for TP/FP group when different cutoffs are applied.  
 
 #### Input Data
 
 The input data file could be in a comma separated values (csv) format, or in a plain text format with its delimiters being one of the following: semicolon, tab, or space. The first row of the file contains the header information for each column. Each row after the header contains the corresponding information for each sample.
-The description and format of each column is described below: 
+The description and format of each column is described below. As long as all the 39 marker levels are included in the file, the metabolic markers can be in any order based on your preference.
 
 | Column         | 1    | 2-40   |
 |:-------------------|:-------------------------|:------------------------------------|
@@ -23,12 +30,9 @@ The description and format of each column is described below:
 | Values | Unique sample id (string) | Individual marker concentration levels (numeric) |
 | Example Values | S01, sample_001 | 0.2, 0.11421383 |
 
-<br>
-As long as all the 39 marker levels are included in the file, the metabolic markers can be in any order based on your preference.
-
 #### Code
 
 Built with [R](http://www.r-project.org) and the [Shiny framework](http://shiny.rstudio.com).
-<br>
+
+
 Source Code
-<hr>

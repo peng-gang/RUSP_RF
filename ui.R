@@ -1,11 +1,12 @@
 library(shiny)
 library(DT)
+library(markdown)
 
 source("parameter.R")
 
 shinyUI(
   fluidPage(
-    titlePanel("NBSRF",
+    titlePanel("RUSPtools",
                title = tags$strong("Newborn Screening with Random Forest")),
     
     sidebarLayout(
@@ -43,7 +44,7 @@ shinyUI(
               )
             ),
             
-            p(a("Example of input File", href="mma.csv", download="mma.csv")),
+            p(a("Example of input File", href="sample_input_file.csv", download="sample_input_file.csv")),
             actionLink("link_to_tabpanel_about", "Details about input file format"),
             
             tags$div(
@@ -88,6 +89,7 @@ shinyUI(
             "About",
             value = "about",
             includeMarkdown("content/About.md"),
+            hr(),
             p(
               "Copyright 2019 by ",
               a("Gang Peng ",
