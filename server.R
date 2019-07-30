@@ -6,7 +6,7 @@ source("functions.R")
 source("parameter.R")
 
 load("www/models.RData")
-cutoff.suggest <- rep(0.5, 4)
+cutoff.suggest <- c(0.01, 0.08, 0.01, 0.1)
 
 #input.data <- read.table("www/mma.new.csv",header = TRUE,sep = ",",stringsAsFactors = FALSE)
 
@@ -45,7 +45,7 @@ shinyServer(function(input, output, session) {
     
     cutoff <<- cutoff.suggest[idx.disorder]
     sliderInput("cutoff", "Cutoff for probability",
-                min=0, max=1, value = cutoff.suggest[idx.disorder], step = 0.01)
+                min=0, max=1, value = cutoff.suggest[idx.disorder], step = 0.001)
   })
   
   output$ui.download.table <- renderUI({
@@ -73,6 +73,8 @@ shinyServer(function(input, output, session) {
   observeEvent(
     eventExpr = input$action,
     handlerExpr = {
+      disorder.sel <<- input$disorder
+      
       idx.disorder <- as.integer(input$disorder)
       
       output$plot <- renderPlot({
@@ -90,7 +92,7 @@ shinyServer(function(input, output, session) {
           colnames(input.data) <- tmp$cname.new
           
           prob <<- predict(models[[idx.disorder]], input.data, type = "prob")[,2]
-          plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 0.5, cutoff)
+          plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, cutoff.suggest[idx.disorder], cutoff)
         })
       })
       
@@ -120,7 +122,7 @@ shinyServer(function(input, output, session) {
       idx.disorder <- as.integer(input$disorder)
       
       output$plot <- renderPlot({
-        plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 0.5, cutoff)
+        plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, cutoff.suggest[idx.disorder], cutoff)
       })
       
       output$table <- DT::renderDataTable({
@@ -191,7 +193,7 @@ shinyServer(function(input, output, session) {
       idx.disorder <- as.integer(input$disorder)
       output$plot <- renderPlot({
         s <- input$table_rows_selected
-        plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 0.5, cutoff, s)
+        plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, cutoff.suggest[idx.disorder], cutoff, s)
       })
     }
   )
@@ -203,7 +205,7 @@ shinyServer(function(input, output, session) {
   output$downloadfigure <- downloadHandler("figure.pdf", content = function(file) {
     pdf(file)
     idx.disorder <- as.integer(input$disorder)
-    print(plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 0.5, cutoff))
+    print(plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, cutoff.suggest[idx.disorder], cutoff))
     dev.off()
   })
   
