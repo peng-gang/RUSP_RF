@@ -7,7 +7,7 @@ disorder.all <- list(
 )
 
 colname.list <- list(
-  "id" = toupper(c("ID")),
+  "id" = toupper(c("ID", "SAMPLE", "SAMPLE IDENTIFIER", "SAMPLE ID", "SID", "IDENTIFIER")),
   "GLY" = toupper(c("GLY", "GLYCINE")),
   "ALA" = toupper(c("ALA", "ALANINE")),
   "PRO" = toupper(c("PRO", "PROLINE")),
