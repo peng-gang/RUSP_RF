@@ -44,8 +44,11 @@ shinyUI(
               )
             ),
             
-            p(a("Example of input File", href="sample_input_file.csv", download="sample_input_file.csv")),
-            actionLink("link_to_tabpanel_about", "Details about input file format"),
+            p(a("Download example input file", href="sample_input_file.csv", download="sample_input_file.csv")),
+            # actionLink("link_to_tabpanel_about", "Details about input file format"),
+            p(a("Details about input file format",
+                href = "https://peng-gang.github.io/RUSP_RF_UserGuide/dataformat.html#metabolic-information",
+                target = "_blank")),
             
             tags$div(
               title = "What kind of delimiter is used in input file",
