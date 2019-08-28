@@ -13,6 +13,8 @@ Data from 2,777 screen-positive infants born between 2005 and 15 were selected a
 
 The California Department of Public Health is not responsible for the results or conclusions drawn by the authors of this publication.
 
+#### Example Data
+Example data is random generated for illustration of data format only. 
 
 #### Code
 
