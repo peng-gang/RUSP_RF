@@ -51,7 +51,7 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
   gp <- ggplot(dplot, aes(x=group, y=p)) + 
     geom_boxplot(aes(color = group, fill = group), outlier.colour = NULL, outlier.fill = NULL) + 
     #geom_boxplot(aes(fill = group))+
-    labs(x = "", y = "PPV") + 
+    labs(x = "", y = "Proportion of True Positive Votes (PPV)") + 
     scale_fill_manual(values=c("#00A1D599", "#B2474599")) + 
     scale_color_manual(values = c("#00A1D599", "#B2474599")) +
     theme_bw() +
@@ -60,12 +60,12 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
                         aes(x=group, y=p), color = "#B24745FF", size = 3) +
     geom_point(data = dplot.point[dplot.point$p<cutoff.sel,], 
                aes(x=group, y=p), color = "#00A1D5FF", size = 3) +
-    theme(axis.text = element_text(size = 15), axis.title = element_text(size=18),
+    theme(axis.text = element_text(size = 15), axis.title = element_text(size=16),
           legend.position = "none")
-  gp <- gp + scale_x_discrete(labels=c("FP" = paste0("FP(",num.FP.RF, "/", num.FP, "=", 
+  gp <- gp + scale_x_discrete(labels=c("FP" = paste0("FP (",num.FP.RF, "/", num.FP, "=", 
                                                      percent.format(num.FP.RF/num.FP, 1), ")"), 
-                                       "NewData" = "NewData",
-                                       "TP" = paste0("TP(", num.FN, "/", num.TP, "=",
+                                       "NewData" = paste0("NewData (", length(prob), ")"),
+                                       "TP" = paste0("TP (", num.FN, "/", num.TP, "=",
                                                      percent.format(num.FN/num.TP, 1), ")")))
   
   
