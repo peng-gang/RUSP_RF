@@ -48,6 +48,15 @@ shinyServer(function(input, output, session) {
                 min=0, max=1, value = cutoff.suggest[idx.disorder], step = 0.001)
   })
   
+  output$ui.cutoff.legend <- renderUI({
+    #if (is.null(inputdata())) return()
+    if (is.null(input$inputdata)) return()
+    if (is.null(input$action) ) return()
+    if (input$action==0) return()
+    
+    fluidRow(tags$img(style="height:38 px; width:60%", src='cutoff_legend.png'))
+  })
+  
   output$ui.download.table <- renderUI({
     #if (is.null(inputdata())) return()
     if (is.null(input$inputdata)) return()
@@ -107,11 +116,17 @@ shinyServer(function(input, output, session) {
               ID = input.data$id,
               Probability = prob,
               Suggestion = ifelse(prob>=cutoff.suggest[idx.disorder], "TP", "FP"),
-              Selected = ifelse(prob>=cutoff, "TP", "FP"))
+              SelectedCutoff = ifelse(prob>=cutoff, "TP", "FP"))
             rlt
           })
-        }, rownames = FALSE) %>%
-          DT::formatRound('Probability', 2)
+        }, 
+        rownames = FALSE,
+        options = list(
+          pageLength= 10, lengthMenu = c(5, 10, 20, 50, 100, 200),
+          columnDefs = list(list(className = 'dt-center', targets = '_all')))) %>%
+          DT::formatRound('Probability', 2) %>% formatStyle(columns = c('Suggestion', 'SelectedCutoff'),
+                                                            color = styleEqual(c("TP","FP"),
+                                                                               c("#F46A4E", "#043D8C")))
       })
     }
   )
@@ -136,11 +151,16 @@ shinyServer(function(input, output, session) {
               ID = input.data$id,
               Probability = prob,
               Suggestion = ifelse(prob>=cutoff.suggest[idx.disorder], "TP", "FP"),
-              Selected = ifelse(prob>=cutoff, "TP", "FP"))
+              SelectedCutoff = ifelse(prob>=cutoff, "TP", "FP"))
             rlt
           })
-        }, rownames = FALSE) %>%
-          DT::formatRound('Probability', 2)
+        }, rownames = FALSE,
+        options = list(
+          pageLength= 10, lengthMenu = c(5, 10, 20, 50, 100, 200),
+          columnDefs = list(list(className = 'dt-center', targets = '_all')))) %>%
+          DT::formatRound('Probability', 2) %>% formatStyle(columns = c('Suggestion', 'SelectedCutoff'),
+                                                            color = styleEqual(c("TP","FP"),
+                                                                               c("#F46A4E", "#043D8C")))
       })
     }
   )
@@ -150,7 +170,7 @@ shinyServer(function(input, output, session) {
       if(!is.null(input$action) && input$disorder != disorder.sel){
         showModal(
           modalDialog(
-            p("If you choose to continue, the current input file and the results will be cleared. Please download the results beforehand if you prefer to keep a record."),
+            p("If you choose to continue, the current results will be cleared. Please download the results beforehand if you prefer to keep a record."),
             title = "You are navigating to a different disease type",
             footer = tagList(
               actionButton("no", "Cancel"),

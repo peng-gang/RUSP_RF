@@ -11,6 +11,7 @@ shinyUI(
     
     sidebarLayout(
       sidebarPanel(
+        width = 3,
         tabsetPanel(
           id="tabset",
           tabPanel(
@@ -25,8 +26,8 @@ shinyUI(
             ),
             
             tags$div(
-              title = "Which state does the data come from",
-              selectInput("state", label = h4("State"),
+              title = "Which state/NBS program does the data come from",
+              selectInput("state", label = h4("NBS Program"),
                           choices = list(
                             "California" = "california"
                           ),
@@ -39,6 +40,7 @@ shinyUI(
               fileInput(
                 "inputdata",
                 "Choose Input File",
+                # label = h5("Choose Input File"),
                 multiple = FALSE,
                 accept = c("text", "csv file", ".txt", ".csv")
               )
@@ -70,22 +72,23 @@ shinyUI(
             hr(),
             
             uiOutput("ui.cutoff"),
+            uiOutput("ui.cutoff.legend")
             
-            p(
-              "Copyright 2019 by ",
-              a("Gang Peng ",
-                href = "https://publichealth.yale.edu/people/gang_peng-1.profile",
-                target = "_blank"),
-              "and ",
-              a("Curt Scharfe.",
-                href = "https://medicine.yale.edu/genetics/people/curt_scharfe-2.profile",
-                target = "_blank")
-            ),
-            p(
-              "Report issues to the",
-              a("developers.",
-                href = "mailto:gang.peng@yale.edu")
-            )
+            # p(
+            #   "Copyright 2019 by ",
+            #   a("Gang Peng ",
+            #     href = "https://publichealth.yale.edu/people/gang_peng-1.profile",
+            #     target = "_blank"),
+            #   "and ",
+            #   a("Curt Scharfe.",
+            #     href = "https://medicine.yale.edu/genetics/people/curt_scharfe-2.profile",
+            #     target = "_blank")
+            # ),
+            # p(
+            #   "Report issues to the",
+            #   a("developers.",
+            #     href = "mailto:gang.peng@yale.edu")
+            # )
           ),
           
           tabPanel(
@@ -115,13 +118,13 @@ shinyUI(
       ),
       
       mainPanel(
-        plotOutput("plot", width = 600, height = 600),
-        fluidRow(column(7, align="right",
+        plotOutput("plot", width = 515, height = 400),
+        fluidRow(column(6, align="right",
                         uiOutput('ui.download.figure'))),
         hr(),
-        DT::dataTableOutput("table", width = 600),
+        DT::dataTableOutput("table", width = 515),
         br(),
-        fluidRow(column(7, align="right",
+        fluidRow(column(6, align="right",
                         uiOutput('ui.download.table')))
       )
     )
