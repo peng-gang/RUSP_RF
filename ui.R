@@ -46,9 +46,9 @@ shinyUI(
               )
             ),
             
-            p(a("Download randomly generated example input file", href="sample_input_file.csv", download="sample_input_file.csv")),
+            p(a("Example of input file", href="sample_input_file.csv", download="sample_input_file.csv")),
             # actionLink("link_to_tabpanel_about", "Details about input file format"),
-            p(a("Details about input file format",
+            p(a("Description of file format",
                 href = "https://peng-gang.github.io/RUSP_RF_UserGuide/dataformat.html#metabolic-information",
                 target = "_blank")),
             
@@ -72,23 +72,24 @@ shinyUI(
             hr(),
             
             uiOutput("ui.cutoff"),
-            uiOutput("ui.cutoff.legend")
+            uiOutput("ui.cutoff.legend"),
+            uiOutput("ui.render.divider"),
             
-            # p(
-            #   "Copyright 2019 by ",
-            #   a("Gang Peng ",
-            #     href = "https://publichealth.yale.edu/people/gang_peng-1.profile",
-            #     target = "_blank"),
-            #   "and ",
-            #   a("Curt Scharfe.",
-            #     href = "https://medicine.yale.edu/genetics/people/curt_scharfe-2.profile",
-            #     target = "_blank")
-            # ),
-            # p(
-            #   "Report issues to the",
-            #   a("developers.",
-            #     href = "mailto:gang.peng@yale.edu")
-            # )
+            p(
+              "Copyright 2019 by ",
+              a("Gang Peng ",
+                href = "https://publichealth.yale.edu/people/gang_peng-1.profile",
+                target = "_blank"),
+              "and ",
+              a("Curt Scharfe.",
+                href = "https://medicine.yale.edu/genetics/people/curt_scharfe-2.profile",
+                target = "_blank")
+            ),
+            p(
+              "Report issues to the",
+              a("developers.",
+                href = "mailto:gang.peng@yale.edu")
+            )
           ),
           
           tabPanel(
