@@ -51,7 +51,7 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
   gp <- ggplot(dplot, aes(x=group, y=p)) + 
     geom_boxplot(aes(color = group, fill = group), outlier.colour = NULL, outlier.fill = NULL) + 
     #geom_boxplot(aes(fill = group))+
-    labs(x = "", y = "Proportion of True Positive Votes (PPV)") + 
+    labs(x = "", y = "Proportion of True Positive Votes (PTPV)") + 
     scale_fill_manual(values=c("#00A1D599", "#B2474599")) + 
     scale_color_manual(values = c("#00A1D599", "#B2474599")) +
     theme_bw() +
