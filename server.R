@@ -54,7 +54,16 @@ shinyServer(function(input, output, session) {
     if (is.null(input$action) ) return()
     if (input$action==0) return()
     
-    fluidRow(tags$img(style="height:38 px; width:60%", src='cutoff_legend.png'))
+    fluidRow(tags$img(style="height:30 px; width:45%", src='cutoff_legend.png'))
+  })
+  
+  output$ui.render.divider <- renderUI({
+    #if (is.null(inputdata())) return()
+    if (is.null(input$inputdata)) return()
+    if (is.null(input$action) ) return()
+    if (input$action==0) return()
+    
+    hr()
   })
   
   output$ui.download.table <- renderUI({
@@ -115,8 +124,8 @@ shinyServer(function(input, output, session) {
             rlt <<- data.frame(
               ID = input.data$id,
               Probability = prob,
-              Suggestion = ifelse(prob>=cutoff.suggest[idx.disorder], "TP", "FP"),
-              SelectedCutoff = ifelse(prob>=cutoff, "TP", "FP"))
+              Default_Cutoff = ifelse(prob>=cutoff.suggest[idx.disorder], "TP", "FP"),
+              User_Cutoff = ifelse(prob>=cutoff, "TP", "FP"))
             rlt
           })
         }, 
@@ -124,7 +133,7 @@ shinyServer(function(input, output, session) {
         options = list(
           pageLength= 10, lengthMenu = c(5, 10, 20, 50, 100, 200),
           columnDefs = list(list(className = 'dt-center', targets = '_all')))) %>%
-          DT::formatRound('Probability', 2) %>% formatStyle(columns = c('Suggestion', 'SelectedCutoff'),
+          DT::formatRound('Probability', 2) %>% formatStyle(columns = c('Default_Cutoff', 'User_Cutoff'),
                                                             color = styleEqual(c("TP","FP"),
                                                                                c("#F46A4E", "#043D8C")))
       })
@@ -150,15 +159,15 @@ shinyServer(function(input, output, session) {
             rlt <<- data.frame(
               ID = input.data$id,
               Probability = prob,
-              Suggestion = ifelse(prob>=cutoff.suggest[idx.disorder], "TP", "FP"),
-              SelectedCutoff = ifelse(prob>=cutoff, "TP", "FP"))
+              Default_Cutoff = ifelse(prob>=cutoff.suggest[idx.disorder], "TP", "FP"),
+              User_Cutoff = ifelse(prob>=cutoff, "TP", "FP"))
             rlt
           })
         }, rownames = FALSE,
         options = list(
           pageLength= 10, lengthMenu = c(5, 10, 20, 50, 100, 200),
           columnDefs = list(list(className = 'dt-center', targets = '_all')))) %>%
-          DT::formatRound('Probability', 2) %>% formatStyle(columns = c('Suggestion', 'SelectedCutoff'),
+          DT::formatRound('Probability', 2) %>% formatStyle(columns = c('Default_Cutoff', 'User_Cutoff'),
                                                             color = styleEqual(c("TP","FP"),
                                                                                c("#F46A4E", "#043D8C")))
       })
