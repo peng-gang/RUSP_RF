@@ -2,8 +2,15 @@
 disorder.all <- list(
   "GA-1" = 1, 
   "MMA" = 2,
-  "OTC" = 3,
+  "OTCD" = 3,
   "VLCADD" = 4
+)
+
+num.TN.NBS <- list(
+  "GA-1" = 5, 
+  "MMA" = 4,
+  "OTCD" = 6,
+  "VLCADD" = 0
 )
 
 colname.list <- list(

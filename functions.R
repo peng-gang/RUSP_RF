@@ -51,7 +51,7 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
   gp <- ggplot(dplot, aes(x=group, y=p)) + 
     geom_boxplot(aes(color = group, fill = group), outlier.colour = NULL, outlier.fill = NULL) + 
     #geom_boxplot(aes(fill = group))+
-    labs(x = "", y = "Proportion of True Positive Votes (PTPV)") + 
+    labs(x = "", y = "RF Score") + 
     scale_fill_manual(values=c("#00A1D599", "#B2474599")) + 
     scale_color_manual(values = c("#00A1D599", "#B2474599")) +
     theme_bw() +
@@ -81,3 +81,27 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
     geom_hline(yintercept = cutoff.suggest, color = "#DF8F44FF", size = 2)
   gp
 }
+
+
+plotBoxDefault <- function(prob.train, y.train, cutoff.suggest){
+  dplot <- data.frame(group = y.train, p = prob.train, stringsAsFactors = FALSE)
+  dplot$group <- factor(dplot$group, levels = c("FP", "NewData", "TP"))
+  
+  gp <- ggplot(dplot, aes(x=group, y=p)) + 
+    geom_boxplot(aes(color = group, fill = group), outlier.colour = NULL, outlier.fill = NULL) + 
+    #geom_boxplot(aes(fill = group))+
+    labs(x = "", y = "RF Score") + 
+    scale_fill_manual(values=c("#00A1D599", "#B2474599")) + 
+    scale_color_manual(values = c("#00A1D599", "#B2474599")) +
+    theme_bw() +
+    theme(legend.title=element_blank())
+  gp <- gp + theme(axis.text = element_text(size = 15), axis.title = element_text(size=16),
+          legend.position = "none")
+  gp <- gp + scale_x_discrete(labels=c("FP" = "FP", 
+                                       "NewData" = "NewData",
+                                       "TP" = "TP"))
+  gp <- gp + 
+    geom_hline(yintercept = cutoff.suggest, color = "#DF8F44FF", size = 2)
+  gp
+}
+

@@ -6,7 +6,8 @@ source("functions.R")
 source("parameter.R")
 
 load("www/models.RData")
-cutoff.suggest <- c(0.01, 0.08, 0.01, 0.1)
+load("www/cutoff.RData")
+#cutoff.suggest <- c(0.01, 0.08, 0.01, 0.1)
 
 #input.data <- read.table("www/mma.new.csv",header = TRUE,sep = ",",stringsAsFactors = FALSE)
 
@@ -43,9 +44,12 @@ shinyServer(function(input, output, session) {
     
     idx.disorder <- as.integer(input$disorder)
     
-    cutoff <<- cutoff.suggest[idx.disorder]
-    sliderInput("cutoff", "Cutoff for probability",
-                min=0, max=1, value = cutoff.suggest[idx.disorder], step = 0.001)
+    step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
+    cutoff <<- 1-num.TN.NBS[[idx.disorder]] * step
+    sliderInput("cutoff", "Sensitivity cutoff",
+                min=0, max=1, 
+                value = 1-num.TN.NBS[[idx.disorder]] * step, 
+                step = step)
   })
   
   output$ui.cutoff.legend <- renderUI({
@@ -92,7 +96,6 @@ shinyServer(function(input, output, session) {
     eventExpr = input$action,
     handlerExpr = {
       disorder.sel <<- input$disorder
-      
       idx.disorder <- as.integer(input$disorder)
       
       output$plot <- renderPlot({
@@ -107,10 +110,23 @@ shinyServer(function(input, output, session) {
                      paste(tmp$cname.notfount, collapse = "\n"))
             ))
           }
+          
           colnames(input.data) <- tmp$cname.new
           
           prob <<- predict(models[[idx.disorder]], input.data, type = "prob")[,2]
-          plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, cutoff.suggest[idx.disorder], cutoff)
+          idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+          #print(cutoff)
+          # print(idx.cutoff)
+          # print(idx.disorder)
+          # print(prob)
+          # print(train.rlt[[idx.disorder]]$prob)
+          # print(train.rlt[[idx.disorder]]$y)
+          # print(cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"])
+          #print(cutoff.all[[idx.disorder]][ idx.cutoff+1, "cutoff"])
+          
+          plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 
+                  cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"], 
+                  cutoff.all[[idx.disorder]][idx.cutoff+1, "cutoff"])
         })
       })
       
@@ -121,11 +137,12 @@ shinyServer(function(input, output, session) {
             cname <- colnames(input.data)
             tmp <- colname.format(cname)
             colnames(input.data) <- tmp$cname.new
+            idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
             rlt <<- data.frame(
               ID = input.data$id,
               Probability = prob,
-              Default_Cutoff = ifelse(prob>=cutoff.suggest[idx.disorder], "TP", "FP"),
-              User_Cutoff = ifelse(prob>=cutoff, "TP", "FP"))
+              Default_Cutoff = ifelse(prob>=cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"], "TP", "FP"),
+              User_Cutoff = ifelse(prob>=cutoff.all[[idx.disorder]][idx.cutoff+1, "cutoff"], "TP", "FP"))
             rlt
           })
         }, 
@@ -146,7 +163,10 @@ shinyServer(function(input, output, session) {
       idx.disorder <- as.integer(input$disorder)
       
       output$plot <- renderPlot({
-        plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, cutoff.suggest[idx.disorder], cutoff)
+        idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+        plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 
+                cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"], 
+                cutoff.all[[idx.disorder]][idx.cutoff+1, "cutoff"])
       })
       
       output$table <- DT::renderDataTable({
@@ -156,11 +176,12 @@ shinyServer(function(input, output, session) {
             cname <- colnames(input.data)
             tmp <- colname.format(cname)
             colnames(input.data) <- tmp$cname.new
+            idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
             rlt <<- data.frame(
               ID = input.data$id,
               Probability = prob,
-              Default_Cutoff = ifelse(prob>=cutoff.suggest[idx.disorder], "TP", "FP"),
-              User_Cutoff = ifelse(prob>=cutoff, "TP", "FP"))
+              Default_Cutoff = ifelse(prob>=cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"], "TP", "FP"),
+              User_Cutoff = ifelse(prob>=cutoff.all[[idx.disorder]][idx.cutoff+1, "cutoff"], "TP", "FP"))
             rlt
           })
         }, rownames = FALSE,
@@ -176,6 +197,16 @@ shinyServer(function(input, output, session) {
   
   observeEvent(
     eventExpr = input$disorder, handlerExpr = {
+      if(is.null(input$action)){
+        idx.disorder <- as.integer(input$disorder)
+        
+        output$plot <- renderPlot({
+          plotBoxDefault(train.rlt[[idx.disorder]]$prob, 
+                         train.rlt[[idx.disorder]]$y, 
+                         cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"])
+        })
+      }
+      
       if(!is.null(input$action) && input$disorder != disorder.sel){
         showModal(
           modalDialog(
@@ -195,10 +226,19 @@ shinyServer(function(input, output, session) {
     eventExpr = input$yes, handlerExpr = {
       disorder.sel <<- input$disorder
       # clean results
-      output$plot <- NULL
+      idx.disorder <- as.integer(input$disorder)
+      output$plot <- renderPlot({
+        plotBoxDefault(train.rlt[[idx.disorder]]$prob, 
+                       train.rlt[[idx.disorder]]$y, 
+                       cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"])
+      })
       output$table <- NULL
       prob <<- NULL
       rlt <<- NULL
+      
+      #step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
+      #cutoff <<- num.TN.NBS[[idx.disorder]] * step
+      #print(cutoff)
       
       # output$ui.action <- NULL
       # output$ui.cutoff <- NULL
@@ -222,7 +262,10 @@ shinyServer(function(input, output, session) {
       idx.disorder <- as.integer(input$disorder)
       output$plot <- renderPlot({
         s <- input$table_rows_selected
-        plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, cutoff.suggest[idx.disorder], cutoff, s)
+        idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+        plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 
+                cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"], 
+                cutoff.all[[idx.disorder]][idx.cutoff+1, "cutoff"], s)
       })
     }
   )
@@ -234,7 +277,10 @@ shinyServer(function(input, output, session) {
   output$downloadfigure <- downloadHandler("figure.pdf", content = function(file) {
     pdf(file)
     idx.disorder <- as.integer(input$disorder)
-    print(plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, cutoff.suggest[idx.disorder], cutoff))
+    idx.cutoff <- round( (1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+    print(plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 
+                  cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"], 
+                  cutoff.all[[idx.disorder]][idx.cutoff+1, "cutoff"]))
     dev.off()
   })
   
