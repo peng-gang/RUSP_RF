@@ -52,14 +52,14 @@ shinyServer(function(input, output, session) {
                 step = step)
   })
   
-  output$ui.cutoff.legend <- renderUI({
-    #if (is.null(inputdata())) return()
-    if (is.null(input$inputdata)) return()
-    if (is.null(input$action) ) return()
-    if (input$action==0) return()
-    
-    fluidRow(tags$img(style="height:30 px; width:45%", src='cutoff_legend.png'))
-  })
+  # output$ui.cutoff.legend <- renderUI({
+  #   #if (is.null(inputdata())) return()
+  #   if (is.null(input$inputdata)) return()
+  #   if (is.null(input$action) ) return()
+  #   if (input$action==0) return()
+  #   
+  #   fluidRow(tags$img(style="height:30 px; width:45%", src='cutoff_legend.png'))
+  # })
   
   output$ui.specificity <- renderUI({
     if (is.null(input$inputdata)) return()
@@ -292,11 +292,15 @@ shinyServer(function(input, output, session) {
     }
   )
   
-  output$downloadtable <- downloadHandler('rlt.csv', content = function(file) {
+  output$downloadtable <- downloadHandler(filename = function() {
+    paste(names(disorder.all[as.integer(input$disorder)]), "_", input$state, "_", Sys.Date(), ".csv", sep="")
+  }, content = function(file) {
     write.csv(rlt, file, row.names = FALSE)
   })
   
-  output$downloadfigure <- downloadHandler("figure.pdf", content = function(file) {
+  output$downloadfigure <- downloadHandler(filename = function() {
+    paste(names(disorder.all[as.integer(input$disorder)]), "_", input$state, "_", Sys.Date(), ".pdf", sep="")
+  }, content = function(file) {
     pdf(file)
     idx.disorder <- as.integer(input$disorder)
     idx.cutoff <- round( (1-cutoff) * nrow(cutoff.all[[idx.disorder]]))

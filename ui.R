@@ -19,7 +19,7 @@ shinyUI(
             value = "data",
             
             tags$div(
-              title = "What kind of disorder do you want to check?",
+              title = "Which disorder do you want to check?",
               selectInput("disorder", label = h4("Disorder"), 
                           choices = disorder.all, 
                           selected = 1)
@@ -53,7 +53,7 @@ shinyUI(
                 target = "_blank")),
             
             tags$div(
-              title = "What kind of delimiter is used in input file",
+              title = "Which delimiter is used in the input file",
               radioButtons(
                 "delimiter",
                 h4("Delimiters"),
@@ -73,7 +73,7 @@ shinyUI(
             
             uiOutput("ui.cutoff"),
             uiOutput("ui.specificity"),
-            uiOutput("ui.cutoff.legend"),
+            # uiOutput("ui.cutoff.legend"),
             uiOutput("ui.render.divider"),
             
             p(
