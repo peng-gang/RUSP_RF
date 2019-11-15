@@ -61,6 +61,16 @@ shinyServer(function(input, output, session) {
     fluidRow(tags$img(style="height:30 px; width:45%", src='cutoff_legend.png'))
   })
   
+  output$ui.specificity <- renderUI({
+    if (is.null(input$inputdata)) return()
+    if (is.null(input$action) ) return()
+    if (input$action==0) return()
+    
+    idx.disorder <- as.integer(input$disorder)
+    
+    verbatimTextOutput("specificity")
+  })
+  
   output$ui.render.divider <- renderUI({
     #if (is.null(inputdata())) return()
     if (is.null(input$inputdata)) return()
@@ -98,6 +108,12 @@ shinyServer(function(input, output, session) {
       disorder.sel <<- input$disorder
       idx.disorder <- as.integer(input$disorder)
       
+      idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+      output$specificity <- renderText(
+        paste0("Estimated Specificity: ", 
+               round(cutoff.all[[idx.disorder]][idx.cutoff+1, "specificity"], 2))
+      )
+      
       output$plot <- renderPlot({
         isolate({
           input.data <- inputdata()
@@ -114,7 +130,7 @@ shinyServer(function(input, output, session) {
           colnames(input.data) <- tmp$cname.new
           
           prob <<- predict(models[[idx.disorder]], input.data, type = "prob")[,2]
-          idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+          #idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
           #print(cutoff)
           # print(idx.cutoff)
           # print(idx.disorder)
@@ -137,7 +153,7 @@ shinyServer(function(input, output, session) {
             cname <- colnames(input.data)
             tmp <- colname.format(cname)
             colnames(input.data) <- tmp$cname.new
-            idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+            #idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
             rlt <<- data.frame(
               ID = input.data$id,
               Probability = prob,
@@ -161,9 +177,15 @@ shinyServer(function(input, output, session) {
     eventExpr = input$cutoff, handlerExpr = {
       cutoff <<- input$cutoff
       idx.disorder <- as.integer(input$disorder)
+      idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+      
+      output$specificity <- renderText(
+        paste0("Estimated Specificity: ", 
+               round(cutoff.all[[idx.disorder]][idx.cutoff+1, "specificity"], 2))
+      )
       
       output$plot <- renderPlot({
-        idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+        #idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
         plotBox(prob, train.rlt[[idx.disorder]]$prob, train.rlt[[idx.disorder]]$y, 
                 cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"], 
                 cutoff.all[[idx.disorder]][idx.cutoff+1, "cutoff"])
@@ -176,7 +198,7 @@ shinyServer(function(input, output, session) {
             cname <- colnames(input.data)
             tmp <- colname.format(cname)
             colnames(input.data) <- tmp$cname.new
-            idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+            #idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
             rlt <<- data.frame(
               ID = input.data$id,
               Probability = prob,

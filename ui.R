@@ -72,6 +72,7 @@ shinyUI(
             hr(),
             
             uiOutput("ui.cutoff"),
+            uiOutput("ui.specificity"),
             uiOutput("ui.cutoff.legend"),
             uiOutput("ui.render.divider"),
             
