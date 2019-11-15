@@ -43,7 +43,6 @@ shinyServer(function(input, output, session) {
     if (input$action==0) return()
     
     idx.disorder <- as.integer(input$disorder)
-    
     step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
     cutoff <<- 1-num.TN.NBS[[idx.disorder]] * step
     sliderInput("cutoff", "Estimated Sensitivity",
@@ -52,14 +51,14 @@ shinyServer(function(input, output, session) {
                 step = step)
   })
   
-  output$ui.cutoff.legend <- renderUI({
-    #if (is.null(inputdata())) return()
-    if (is.null(input$inputdata)) return()
-    if (is.null(input$action) ) return()
-    if (input$action==0) return()
-    
-    fluidRow(tags$img(style="height:30 px; width:45%", src='cutoff_legend.png'))
-  })
+  # output$ui.cutoff.legend <- renderUI({
+  #   #if (is.null(inputdata())) return()
+  #   if (is.null(input$inputdata)) return()
+  #   if (is.null(input$action) ) return()
+  #   if (input$action==0) return()
+  #   
+  #   fluidRow(tags$img(style="height:30 px; width:45%", src='cutoff_legend.png'))
+  # })
   
   output$ui.specificity <- renderUI({
     if (is.null(input$inputdata)) return()
@@ -222,6 +221,9 @@ shinyServer(function(input, output, session) {
       if(is.null(input$action)){
         idx.disorder <- as.integer(input$disorder)
         
+        step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
+        cutoff <<- 1-num.TN.NBS[[idx.disorder]] * step
+        
         output$plot <- renderPlot({
           plotBoxDefault(train.rlt[[idx.disorder]]$prob, 
                          train.rlt[[idx.disorder]]$y, 
@@ -249,6 +251,10 @@ shinyServer(function(input, output, session) {
       disorder.sel <<- input$disorder
       # clean results
       idx.disorder <- as.integer(input$disorder)
+      
+      step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
+      cutoff <<- 1-num.TN.NBS[[idx.disorder]] * step
+      
       output$plot <- renderPlot({
         plotBoxDefault(train.rlt[[idx.disorder]]$prob, 
                        train.rlt[[idx.disorder]]$y, 

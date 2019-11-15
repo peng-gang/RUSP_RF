@@ -73,7 +73,7 @@ shinyUI(
             
             uiOutput("ui.cutoff"),
             uiOutput("ui.specificity"),
-            uiOutput("ui.cutoff.legend"),
+            #uiOutput("ui.cutoff.legend"),
             uiOutput("ui.render.divider"),
             
             p(
@@ -120,7 +120,7 @@ shinyUI(
       ),
       
       mainPanel(
-        plotOutput("plot", width = 515, height = 400),
+        plotOutput("plot", width = 515, height = 450),
         fluidRow(column(6, align="right",
                         uiOutput('ui.download.figure'))),
         hr(),
