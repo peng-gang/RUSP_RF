@@ -46,7 +46,7 @@ shinyServer(function(input, output, session) {
     
     step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
     cutoff <<- 1-num.TN.NBS[[idx.disorder]] * step
-    sliderInput("cutoff", "Sensitivity cutoff",
+    sliderInput("cutoff", "Estimated Sensitivity",
                 min=0, max=1, 
                 value = 1-num.TN.NBS[[idx.disorder]] * step, 
                 step = step)
