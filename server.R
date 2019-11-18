@@ -43,7 +43,6 @@ shinyServer(function(input, output, session) {
     if (input$action==0) return()
     
     idx.disorder <- as.integer(input$disorder)
-    
     step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
     cutoff <<- 1-num.TN.NBS[[idx.disorder]] * step
     sliderInput("cutoff", "Estimated Sensitivity",
@@ -222,6 +221,9 @@ shinyServer(function(input, output, session) {
       if(is.null(input$action)){
         idx.disorder <- as.integer(input$disorder)
         
+        step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
+        cutoff <<- 1-num.TN.NBS[[idx.disorder]] * step
+        
         output$plot <- renderPlot({
           plotBoxDefault(train.rlt[[idx.disorder]]$prob, 
                          train.rlt[[idx.disorder]]$y, 
@@ -249,6 +251,10 @@ shinyServer(function(input, output, session) {
       disorder.sel <<- input$disorder
       # clean results
       idx.disorder <- as.integer(input$disorder)
+      
+      step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
+      cutoff <<- 1-num.TN.NBS[[idx.disorder]] * step
+      
       output$plot <- renderPlot({
         plotBoxDefault(train.rlt[[idx.disorder]]$prob, 
                        train.rlt[[idx.disorder]]$y, 
@@ -292,15 +298,11 @@ shinyServer(function(input, output, session) {
     }
   )
   
-  output$downloadtable <- downloadHandler(filename = function() {
-    paste(names(disorder.all[as.integer(input$disorder)]), "_", input$state, "_", Sys.Date(), ".csv", sep="")
-  }, content = function(file) {
+  output$downloadtable <- downloadHandler('rlt.csv', content = function(file) {
     write.csv(rlt, file, row.names = FALSE)
   })
   
-  output$downloadfigure <- downloadHandler(filename = function() {
-    paste(names(disorder.all[as.integer(input$disorder)]), "_", input$state, "_", Sys.Date(), ".pdf", sep="")
-  }, content = function(file) {
+  output$downloadfigure <- downloadHandler("figure.pdf", content = function(file) {
     pdf(file)
     idx.disorder <- as.integer(input$disorder)
     idx.cutoff <- round( (1-cutoff) * nrow(cutoff.all[[idx.disorder]]))

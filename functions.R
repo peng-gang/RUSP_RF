@@ -49,19 +49,20 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
   num.FP.RF <- sum(dplot$p[dplot$group=="FP"]>=cutoff.sel)
   
   gp <- ggplot(dplot, aes(x=group, y=p)) + 
-    geom_boxplot(aes(color = group, fill = group), outlier.colour = NULL, outlier.fill = NULL) + 
+    geom_boxplot(aes(color = group, fill = group), outlier.colour = NULL, outlier.fill = NULL,
+                 show.legend = FALSE) + 
     #geom_boxplot(aes(fill = group))+
     labs(x = "", y = "RF Score") + 
     scale_fill_manual(values=c("#00A1D599", "#B2474599")) + 
     scale_color_manual(values = c("#00A1D599", "#B2474599")) +
     theme_bw() +
-    theme(legend.title=element_blank())
+    theme(legend.title=element_blank(), legend.position = "bottom",
+          legend.key.width = unit(2,"cm"), legend.text = element_text(size=15))
   gp <- gp + geom_point(data = dplot.point[dplot.point$p>=cutoff.sel,], 
                         aes(x=group, y=p), color = "#B24745FF", size = 3) +
     geom_point(data = dplot.point[dplot.point$p<cutoff.sel,], 
                aes(x=group, y=p), color = "#00A1D5FF", size = 3) +
-    theme(axis.text = element_text(size = 15), axis.title = element_text(size=16),
-          legend.position = "none")
+    theme(axis.text = element_text(size = 15), axis.title = element_text(size=16))
   gp <- gp + scale_x_discrete(labels=c("FP" = paste0("FP (",num.FP.RF, "/", num.FP, "=", 
                                                      percent.format(num.FP.RF/num.FP, 1), ")"), 
                                        "NewData" = paste0("NewData (", length(prob), ")"),
@@ -77,8 +78,13 @@ plotBox <- function(prob, prob.train, y.train, cutoff.suggest, cutoff.sel, point
                  aes(x=group, y=p), color = "#00A1D5FF", size = 5, shape = 1)
   }
   
-  gp <- gp + geom_hline(yintercept = cutoff.sel, color = "#DF8F44FF", size = 2, linetype = 2) +
-    geom_hline(yintercept = cutoff.suggest, color = "#DF8F44FF", size = 2)
+  gp <- gp + 
+    geom_hline(data = data.frame(y=c(cutoff.suggest, cutoff.sel),
+                                 type = c("Default Cutoff", "User Cutoff")),
+               aes(yintercept=y, linetype=type), 
+               #yintercept = cutoff.suggest, 
+               color = "#DF8F44FF", size = 2) + 
+    scale_linetype_manual(values=c("solid", "dotted"))
   gp
 }
 
@@ -88,20 +94,26 @@ plotBoxDefault <- function(prob.train, y.train, cutoff.suggest){
   dplot$group <- factor(dplot$group, levels = c("FP", "NewData", "TP"))
   
   gp <- ggplot(dplot, aes(x=group, y=p)) + 
-    geom_boxplot(aes(color = group, fill = group), outlier.colour = NULL, outlier.fill = NULL) + 
+    geom_boxplot(aes(color = group, fill = group), outlier.colour = NULL, outlier.fill = NULL,
+                 show.legend = FALSE) + 
     #geom_boxplot(aes(fill = group))+
     labs(x = "", y = "RF Score") + 
     scale_fill_manual(values=c("#00A1D599", "#B2474599")) + 
     scale_color_manual(values = c("#00A1D599", "#B2474599")) +
     theme_bw() +
-    theme(legend.title=element_blank())
-  gp <- gp + theme(axis.text = element_text(size = 15), axis.title = element_text(size=16),
-          legend.position = "none")
+    theme(legend.title=element_blank(), legend.position = "bottom",
+          legend.key.width = unit(2,"cm"), legend.text = element_text(size=15))
+  gp <- gp + theme(axis.text = element_text(size = 15), axis.title = element_text(size=16))
   gp <- gp + scale_x_discrete(labels=c("FP" = "FP", 
                                        "NewData" = "NewData",
                                        "TP" = "TP"))
   gp <- gp + 
-    geom_hline(yintercept = cutoff.suggest, color = "#DF8F44FF", size = 2)
+    geom_hline(data = data.frame(y=c(cutoff.suggest, cutoff.suggest),
+                                 type = c("Default Cutoff", "User Cutoff")),
+               aes(yintercept=y, linetype=type), 
+               #yintercept = cutoff.suggest, 
+               color = "#DF8F44FF", size = 2) + 
+    scale_linetype_manual(values=c("solid", "dotted"))
   gp
 }
 

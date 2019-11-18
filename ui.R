@@ -19,7 +19,7 @@ shinyUI(
             value = "data",
             
             tags$div(
-              title = "Which disorder do you want to check?",
+              title = "What kind of disorder do you want to check?",
               selectInput("disorder", label = h4("Disorder"), 
                           choices = disorder.all, 
                           selected = 1)
@@ -53,7 +53,7 @@ shinyUI(
                 target = "_blank")),
             
             tags$div(
-              title = "Which delimiter is used in the input file",
+              title = "What kind of delimiter is used in input file",
               radioButtons(
                 "delimiter",
                 h4("Delimiters"),
@@ -73,7 +73,7 @@ shinyUI(
             
             uiOutput("ui.cutoff"),
             uiOutput("ui.specificity"),
-            # uiOutput("ui.cutoff.legend"),
+            #uiOutput("ui.cutoff.legend"),
             uiOutput("ui.render.divider"),
             
             p(
@@ -120,11 +120,7 @@ shinyUI(
       ),
       
       mainPanel(
-<<<<<<< HEAD
-        plotOutput("plot", width = 515, height = 460),
-=======
-        plotOutput("plot", width = 515, height = 400),
->>>>>>> 76eb275980f47acc8c3065f5ba186111fbe241ea
+        plotOutput("plot", width = 515, height = 450),
         fluidRow(column(6, align="right",
                         uiOutput('ui.download.figure'))),
         hr(),
