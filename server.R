@@ -158,7 +158,7 @@ shinyServer(function(input, output, session) {
             #idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
             rlt <<- data.frame(
               ID = input.data$id,
-              Probability = prob,
+              RFScore = prob,
               Default_Cutoff = ifelse(prob>=cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"], "TP", "FP"),
               User_Cutoff = ifelse(prob>=cutoff.all[[idx.disorder]][idx.cutoff+1, "cutoff"], "TP", "FP"))
             rlt
@@ -168,7 +168,7 @@ shinyServer(function(input, output, session) {
         options = list(
           pageLength= 10, lengthMenu = c(5, 10, 20, 50, 100, 200),
           columnDefs = list(list(className = 'dt-center', targets = '_all')))) %>%
-          DT::formatRound('Probability', 2) %>% formatStyle(columns = c('Default_Cutoff', 'User_Cutoff'),
+          DT::formatRound('RFScore', 2) %>% formatStyle(columns = c('Default_Cutoff', 'User_Cutoff'),
                                                             color = styleEqual(c("TP","FP"),
                                                                                c("#F46A4E", "#043D8C")))
       })
@@ -203,7 +203,7 @@ shinyServer(function(input, output, session) {
             #idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
             rlt <<- data.frame(
               ID = input.data$id,
-              Probability = prob,
+              RFScore = prob,
               Default_Cutoff = ifelse(prob>=cutoff.all[[idx.disorder]][num.TN.NBS[[idx.disorder]]+1, "cutoff"], "TP", "FP"),
               User_Cutoff = ifelse(prob>=cutoff.all[[idx.disorder]][idx.cutoff+1, "cutoff"], "TP", "FP"))
             rlt
@@ -212,7 +212,7 @@ shinyServer(function(input, output, session) {
         options = list(
           pageLength= 10, lengthMenu = c(5, 10, 20, 50, 100, 200),
           columnDefs = list(list(className = 'dt-center', targets = '_all')))) %>%
-          DT::formatRound('Probability', 2) %>% formatStyle(columns = c('Default_Cutoff', 'User_Cutoff'),
+          DT::formatRound('RFScore', 2) %>% formatStyle(columns = c('Default_Cutoff', 'User_Cutoff'),
                                                             color = styleEqual(c("TP","FP"),
                                                                                c("#F46A4E", "#043D8C")))
       })
