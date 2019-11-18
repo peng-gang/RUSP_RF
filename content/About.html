@@ -183,61 +183,20 @@ summary {
 
 <div id="about-rusp-rf" class="section level4">
 <h4>About RUSP RF</h4>
-<p>This web application focuses on integrating all metabolomics analytes with data mining method to remove as many false positives in first-tier tests as possible. Random Forest was proved promising in other multivrariate analysis settings and is applied here to yield second-tier DBS test results with higher specificity without reducing sensitivity.</p>
+<p>This web application focuses on integrating all metabolomics analytes with random forest method to remove as many false positives in first-tier tests as possible. Random Forest was proved promising in other multivrariate analysis settings and is applied here to yield second-tier NBS test results with higher specificity without reducing sensitivity.</p>
 </div>
-<div id="model" class="section level4">
-<h4>Model</h4>
-<p>TBA</p>
+<div id="user-guide" class="section level4">
+<h4>User Guide</h4>
+<p><a href="https://peng-gang.github.io/RUSP_RF_UserGuide/" target="_blank">View User Guide</a></p>
 </div>
-<div id="instructions" class="section level4">
-<h4>Instructions</h4>
-<p>TBA</p>
-</div>
-<div id="input-data" class="section level4">
-<h4>Input Data</h4>
-<p>The input data file could be in a comma separated values (csv) format, or in a plain text format with its delimiters being one of the following: semicolon, tab, or space. The first row of the file contains the header information for each column. Each row after the header contains the corresponding information for each sample. The description and format of each column is described below:</p>
-<table style="width:100%;">
-<colgroup>
-<col width="24%"></col>
-<col width="31%"></col>
-<col width="44%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Column</th>
-<th align="left">1</th>
-<th align="left">2-40</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Headers</td>
-<td align="left">id</td>
-<td align="left">Original marker name or its abbreviation</td>
-</tr>
-<tr class="even">
-<td align="left">Example Headers</td>
-<td align="left">id</td>
-<td align="left">Citrulline, CIT, C18:1, c181</td>
-</tr>
-<tr class="odd">
-<td align="left">Values</td>
-<td align="left">Unique sample id (string)</td>
-<td align="left">Individual marker concentration levels (numeric)</td>
-</tr>
-<tr class="even">
-<td align="left">Example Values</td>
-<td align="left">S01, sample_001</td>
-<td align="left">0.2, 0.11421383</td>
-</tr>
-</tbody>
-</table>
-<p><br> As long as all the 39 marker levels are included in the file, the metabolic markers can be in any order based on your preference.</p>
+<div id="training-data" class="section level4">
+<h4>Training Data</h4>
+<p>Data from 2,777 screen-positive infants born between 2005 and 15 were selected at random by the <a href="https://www.cdph.ca.gov/Programs/CFH/DGDS/Pages/cbp/default.aspx">California NBS program</a> that included metabolic analytes measured by MS/MS. The above data includes 235 true-positives and 2,542 false-positives, where an infants could be screen-positive for multiple diseases.</p>
+<p>The California Department of Public Health is not responsible for the results or conclusions drawn by the authors of this publication.</p>
 </div>
 <div id="code" class="section level4">
 <h4>Code</h4>
-Built with <a href="http://www.r-project.org">R</a> and the <a href="http://shiny.rstudio.com">Shiny framework</a>. <br> Source Code
-<hr>
+<p>Built with <a href="http://www.r-project.org" target="_blank">R</a> and the <a href="http://shiny.rstudio.com" target="_blank">Shiny framework</a>.</p>
 </div>
 
 
