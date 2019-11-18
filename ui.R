@@ -120,7 +120,7 @@ shinyUI(
       ),
       
       mainPanel(
-        plotOutput("plot", width = 515, height = 450),
+        plotOutput("plot", width = 515, height = 460),
         fluidRow(column(6, align="right",
                         uiOutput('ui.download.figure'))),
         hr(),
