@@ -107,7 +107,10 @@ shinyServer(function(input, output, session) {
       disorder.sel <<- input$disorder
       idx.disorder <- as.integer(input$disorder)
       
+      step <- round(1.0/nrow(cutoff.all[[idx.disorder]]), digits = 2)
+      cutoff <<- 1-num.TN.NBS[[idx.disorder]] * step
       idx.cutoff <- round((1-cutoff) * nrow(cutoff.all[[idx.disorder]]))
+      
       output$specificity <- renderText(
         paste0("Estimated Specificity: ", 
                round(cutoff.all[[idx.disorder]][idx.cutoff+1, "specificity"], 2))
