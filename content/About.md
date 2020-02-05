@@ -1,23 +1,16 @@
-#### About RUSP RF
+#### About the RF-tool
 
-This web application focuses on integrating all metabolomics analytes with random forest method to remove as many false positives in first-tier tests as possible. 
-Random Forest was proved promising in other multivrariate analysis settings and is applied here to yield second-tier NBS test results with higher specificity without reducing sensitivity.
+This web application utilizes Random Forest-based machine learning to identify false-positive results in newborn metabolic screening data.
 
-#### User Guide
+<a href="user_guide.pdf" download="user_guide.pdf">View User Guide</a>
 
-<a href="https://peng-gang.github.io/RUSP_RF_UserGuide/" target="_blank">View User Guide</a>
+#### Data
 
-#### Training Data
-
-Data from 2,777 screen-positive infants born between 2005 and 15 were selected at random by the <a href="https://www.cdph.ca.gov/Programs/CFH/DGDS/Pages/cbp/default.aspx" target="_blank">California NBS program</a> that included metabolic analytes measured by MS/MS. The above data includes 235 true-positives and 2,542 false-positives, where an infants could be screen-positive for multiple diseases. 
-
-The California Department of Public Health is not responsible for the results or conclusions drawn by the authors of this publication.
-
-#### Example Data
-Example data is random generated for illustration of data format only. 
+Data from 2,777 screen-positive infants born between 2005-15 were provided by the California NBS program, which consisted of 235 confirmed disease cases and 2542 false-positives for one of four disorders: glutaric acidemia type 1 (GA-1), methylmalonic acidemia (MMA), ornithine transcarbamylase deficiency (OTCD), and very long-chain acyl-CoA dehydrogenase deficiency (VLCADD). The California Department of Public Health is not responsible for the results or conclusions drawn by the authors of this publication.
 
 #### Code
 
 Built with <a href="http://www.r-project.org" target="_blank">R</a> and the <a href="http://shiny.rstudio.com" target="_blank">Shiny framework</a>.
+
 
 
